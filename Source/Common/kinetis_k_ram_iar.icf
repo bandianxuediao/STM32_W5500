@@ -1,0 +1,72 @@
+/*********************************************Copyright (c)***********************************************
+**                                Guangzhou ZLG MCU Technology Co., Ltd.
+**
+**                                        http://www.zlgmcu.com
+**
+**--------------File Info---------------------------------------------------------------------------------
+** File name:               kinetis_k_flash_iar.icf
+** Last modified date:      2012-12-13
+** Last version:            V1.0
+** Description:             ICF file of IAR for kinetis
+**
+**--------------------------------------------------------------------------------------------------------
+** Created by:              Fan Linyun
+** Created date:            2012-12-13
+** Version:                 V1.0
+** Descriptions:            The original version
+**
+**--------------------------------------------------------------------------------------------------------
+** Modified by:             
+** Modified date:           
+** Version:                 
+** Descriptions:            
+**
+*********************************************************************************************************/
+
+
+/*###ICF### Section handled by ICF editor, don't touch! ****/
+/*-Editor annotation file-*/
+/* IcfEditorFile="$PROJ_DIR$\..\Source\Common\kinetis_k_IcfEditor.xml" */
+
+
+define symbol __ICFEDIT_intvec_start__ = 0x20000000;
+
+define symbol __ICFEDIT_region_ROM1_start__ = 0x1FFF8410;
+define symbol __ICFEDIT_region_ROM1_end__   = 0x1FFFFFFF;
+
+define symbol __ICFEDIT_region_ROM2_start__ = 0;
+define symbol __ICFEDIT_region_ROM2_end__   = 0;
+
+define symbol __ICFEDIT_region_RAM1_start__ = 0x20000000;
+define symbol __ICFEDIT_region_RAM1_end__   = 0x20040000;
+
+define symbol __ICFEDIT_region_RAM2_start__ = 0;
+define symbol __ICFEDIT_region_RAM2_end__   = 0;
+
+define symbol __ICFEDIT_size_cstack__ = 0x400;
+define symbol __ICFEDIT_size_heap__   = 0x000;
+
+/**** End of ICF editor section. ###ICF###*/
+
+
+define memory mem with size = 4G;
+
+define region ROM = mem:[from __ICFEDIT_region_ROM1_start__ to __ICFEDIT_region_ROM1_end__] | 
+                    mem:[from __ICFEDIT_region_ROM2_start__ to __ICFEDIT_region_ROM2_end__];
+define region RAM = mem:[from __ICFEDIT_region_RAM1_start__ to __ICFEDIT_region_RAM1_end__] | 
+                    mem:[from __ICFEDIT_region_RAM2_start__ to __ICFEDIT_region_RAM2_end__];
+
+define block CSTACK with alignment = 8, size = __ICFEDIT_size_cstack__ { };
+define block HEAP   with alignment = 8, size = __ICFEDIT_size_heap__   { };
+
+initialize by copy { readwrite, section .textrw };
+do not initialize  { section .noinit };
+
+place at address mem: __ICFEDIT_intvec_start__ { readonly section .intvec };
+
+place in ROM { readonly, section .textrw_init };
+place in RAM { section .textrw, readwrite, block CSTACK, block HEAP};
+
+/*********************************************************************************************************
+  END FILE
+*********************************************************************************************************/
